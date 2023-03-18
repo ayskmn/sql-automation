@@ -16,7 +16,7 @@ public class MySqlConnector {
     private static final String USER = "root";
 
     // The password for the database connection.
-    private static final String PASSWORD = "Pavel443";
+    private static final String PASSWORD = "root";
 
     /**
      * Establishes and returns a connection to the MySQL database.
