@@ -23,12 +23,13 @@ public class EmployeeDao {
 
     // SQL query to get salary from salaries less than 100 000.
     private static final String GET_SALARIES_LESS_THAN_100000_SQL = "SELECT salary from salaries WHERE salary < 100000";
-    
+
     // SQL query to get salaries greater than 100 000 after 1999 year.
     private static final String GET_SALARIES_GREATER_THAN_100000_AND_YEAR_GREATER_THAN_1999_SQL = "SELECT * from salaries WHERE salary > 100000 AND DATE_FORMAT(to_date, '%Y') > 1999";
-    
+
     // SQL query to get employees table with men whose first name start with "Z".
     private static final String GET_EMPLOYEES_MALE_FIRST_NAME_STARTS_WITH_Z_SQL = "SELECT * from employees WHERE first_name > 'z%' AND gender = 'M'";
+
     /**
      * Retrieves the full names of all employees from the database.
      *
@@ -69,7 +70,7 @@ public class EmployeeDao {
         }
         return employees;
     }
-    
+
     /**
      * Retrieves the salaries which is less than 100 000 from the database.
      *
@@ -82,13 +83,13 @@ public class EmployeeDao {
              PreparedStatement preparedStatement = connection.prepareStatement(GET_SALARIES_LESS_THAN_100000_SQL)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                	salaries.add(resultSet.getString("salary"));
+                    salaries.add(resultSet.getString("salary"));
                 }
             }
         }
         return salaries;
     }
-    
+
     /**
      * Retrieves salaries greater than 100 000 after 1999 year.
      *
@@ -112,11 +113,11 @@ public class EmployeeDao {
         }
         return salaries;
     }
-    
+
     /**
      * Retrieves male employees with first name starts from "Z".
      *
-     * @return A list of maps containing employee numbers, birth date, first name, last name, gender and hire date.
+     * @return A list of maps containing employee numbers, birthdate, first name, last name, gender and hire date.
      * @throws SQLException If there is an issue executing the SQL query.
      */
     public List<Map<String, String>> getMaleEmployeesWithFirstNameStartFromZ() throws SQLException {
@@ -132,7 +133,7 @@ public class EmployeeDao {
                     employee.put("last_name", resultSet.getString("last_name"));
                     employee.put("gender", resultSet.getString("gender"));
                     employee.put("hire_date", resultSet.getString("hire_date"));
-                    	employees.add(employee);
+                    employees.add(employee);
                 }
             }
         }

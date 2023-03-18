@@ -8,8 +8,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
-* by OmerAKBEN
-* */
+ * by OmerAKBEN
+ * */
 public class EmployeeDaoTest {
 
     private final EmployeeDao employeeDao = new EmployeeDao();
@@ -36,14 +36,14 @@ public class EmployeeDaoTest {
             assertTrue(birthYearInt >= 1960 && birthYearInt <= 1961, "Birth year should be between 1960 and 1961");
         }
     }
-    
+
     @Test
     public void testGetSalariesLessThan100000() throws SQLException {
         List<String> salaries = employeeDao.getSalariesLessThan100000();
         for (String salary : salaries) {
-			int salaryInt = Integer.parseInt(salary);
-        	assertTrue(salaryInt < 100000, "The salary should be less than 100 000");
-		}
+            int salaryInt = Integer.parseInt(salary);
+            assertTrue(salaryInt < 100000, "The salary should be less than 100 000");
+        }
         assertFalse(salaries.isEmpty(), "The salaries list should not be empty");
     }
 
@@ -64,20 +64,20 @@ public class EmployeeDaoTest {
             assertFalse(dateTo.isEmpty(), "To date should not be empty");
 
             int salaryInt = Integer.parseInt(salaryEach);
-            int yearFromInt = Integer.parseInt(dateFrom.substring(0,4));
-            int yearToInt = Integer.parseInt(dateTo.trim().substring(0,4));
-            
+            int yearFromInt = Integer.parseInt(dateFrom.substring(0, 4));
+            int yearToInt = Integer.parseInt(dateTo.trim().substring(0, 4));
+
             assertTrue(salaryInt > 100000, "Salary should be greater than 100 000");
             assertTrue(yearFromInt <= yearToInt, "From date should not be greater than to date");
             assertTrue(yearToInt > 1999, "To date should be greater than 1999");
         }
     }
-    
+
     @Test
     public void testGetMaleEmployeesWithFirstNameStartFromZ() throws SQLException {
         List<Map<String, String>> employees = employeeDao.getMaleEmployeesWithFirstNameStartFromZ();
         assertFalse(employees.isEmpty(), "The employee list should not be empty");
-        
+
         for (Map<String, String> employee : employees) {
             String firstName = employee.get("first_name");
             String gender = employee.get("gender");
@@ -85,7 +85,7 @@ public class EmployeeDaoTest {
             String birthDate = employee.get("birth_date");
             String lastName = employee.get("last_name");
             String hireDate = employee.get("hire_date");
-            
+
             assertFalse(firstName.isEmpty(), "First name should not be empty");
             assertFalse(gender.isEmpty(), "Gender should not be empty");
             assertFalse(employeeNumber.isEmpty(), "Employee number should not be empty");
@@ -93,8 +93,8 @@ public class EmployeeDaoTest {
             assertFalse(lastName.isEmpty(), "Last name should not be empty");
             assertFalse(hireDate.isEmpty(), "Hire date should not be empty");
 
-            assertTrue(firstName.toLowerCase().charAt(0) == 'z', "First name should starts with letter 'z'");
-            assertTrue(gender.trim().equals("M"), "Gender should be a male");
+            assertEquals('z', firstName.toLowerCase().charAt(0), "First name should starts with letter 'z'");
+            assertEquals("M", gender.trim(), "Gender should be a male");
         }
     }
 }
