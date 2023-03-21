@@ -1,5 +1,6 @@
 package com.omerinfo;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,12 +73,12 @@ public class EmployeeDao {
     }
 
     /**
-     * Retrieves the salaries which is less than 100 000 from the database.
+     * Retrieves salaries that are less than 100.000 from the Salaries table.
      *
-     * @return A list of salaries.
-     * @throws SQLException If there is an issue executing the SQL query.
+     * @return A list of salaries
+     * @throws SQLException upon an issue with execution of the query.
      */
-    public List<String> getSalariesLessThan100000() throws SQLException {
+    public List<String> getSalariesBelow100K() throws SQLException {
         List<String> salaries = new ArrayList<>();
         try (Connection connection = MySqlConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_SALARIES_LESS_THAN_100000_SQL)) {
@@ -91,41 +92,45 @@ public class EmployeeDao {
     }
 
     /**
-     * Retrieves salaries greater than 100 000 after 1999 year.
+     * Retrieves salary info of employees with salary greater than 100.000 and year greater than 1999
      *
-     * @return A list of maps containing the employee number, salary, from date and to date.
-     * @throws SQLException If there is an issue executing the SQL query.
+     * @return a list of maps with employee number, salary and dates of each employee that has salary
+     * above 100.000 with year greater than 1999.
+     * @throws SQLException when execution of the query is not successful
+     *
      */
-    public List<Map<String, String>> getSalariesGreaterThan100000AndYearGreaterThan1999() throws SQLException {
-        List<Map<String, String>> salaries = new ArrayList<>();
-        try (Connection connection = MySqlConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_SALARIES_GREATER_THAN_100000_AND_YEAR_GREATER_THAN_1999_SQL)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
+    public List<Map<String, String>> getEmployeesWSalaryAbove100KAfter99() throws SQLException {
+        List<Map<String, String>> employees = new ArrayList<>();
+        try(Connection connection = MySqlConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(GET_SALARIES_GREATER_THAN_100000_AND_YEAR_GREATER_THAN_1999_SQL)) {
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                while(resultSet.next()){
                     Map<String, String> salary = new HashMap<>();
                     salary.put("emp_no", resultSet.getString("emp_no"));
                     salary.put("salary", resultSet.getString("salary"));
                     salary.put("from_date", resultSet.getString("from_date"));
                     salary.put("to_date", resultSet.getString("to_date"));
-                    salaries.add(salary);
+                    employees.add(salary);
                 }
             }
         }
-        return salaries;
+        return employees;
     }
 
     /**
-     * Retrieves male employees with first name starts from "Z".
+     * Retrieves all Male employees with names starting with letter 'Z'
      *
-     * @return A list of maps containing employee numbers, birthdate, first name, last name, gender and hire date.
-     * @throws SQLException If there is an issue executing the SQL query.
+     * @return employee no, first name, last name, birth date, gender and hire date
+     * of those male employees with names starting with Z.
+     * @throws SQLException when the query is not executed successfully.
+     *
      */
-    public List<Map<String, String>> getMaleEmployeesWithFirstNameStartFromZ() throws SQLException {
+    public List<Map<String, String>> getMaleEmployeesWithInitialsZ() throws SQLException{
         List<Map<String, String>> employees = new ArrayList<>();
-        try (Connection connection = MySqlConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_EMPLOYEES_MALE_FIRST_NAME_STARTS_WITH_Z_SQL)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
+        try(Connection connection = MySqlConnector.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(GET_EMPLOYEES_MALE_FIRST_NAME_STARTS_WITH_Z_SQL)) {
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                while(resultSet.next()){
                     Map<String, String> employee = new HashMap<>();
                     employee.put("emp_no", resultSet.getString("emp_no"));
                     employee.put("birth_date", resultSet.getString("birth_date"));
@@ -140,3 +145,9 @@ public class EmployeeDao {
         return employees;
     }
 }
+
+
+
+
+
+

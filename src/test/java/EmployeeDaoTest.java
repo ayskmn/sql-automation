@@ -2,6 +2,7 @@ import com.omerinfo.EmployeeDao;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,63 +39,51 @@ public class EmployeeDaoTest {
     }
 
     @Test
-    public void testGetSalariesLessThan100000() throws SQLException {
-        List<String> salaries = employeeDao.getSalariesLessThan100000();
-        for (String salary : salaries) {
-            int salaryInt = Integer.parseInt(salary);
-            assertTrue(salaryInt < 100000, "The salary should be less than 100 000");
+    public void testGetSalariesBelow100K() throws SQLException{
+        List<String> salaries = employeeDao.getSalariesBelow100K();
+        for(String salary: salaries){
+            int intSalary = Integer.parseInt(salary);
+            assertTrue(intSalary < 100000, "salary is not correct, it's not below 100K");
         }
-        assertFalse(salaries.isEmpty(), "The salaries list should not be empty");
+        assertFalse(salaries.isEmpty(), "salaries list should not be empty");
     }
 
     @Test
-    public void testGetSalariesGreaterThan100000AndYearGreaterThan1999() throws SQLException {
-        List<Map<String, String>> salaries = employeeDao.getSalariesGreaterThan100000AndYearGreaterThan1999();
-        assertFalse(salaries.isEmpty(), "The salariy list should not be empty");
-
-        for (Map<String, String> row : salaries) {
-            String employeeNumber = row.get("emp_no");
-            String salaryEach = row.get("salary");
-            String dateFrom = row.get("from_date");
-            String dateTo = row.get("to_date");
-
-            assertFalse(employeeNumber.isEmpty(), "Employee number should not be empty");
-            assertFalse(salaryEach.isEmpty(), "Salary should not be empty");
-            assertFalse(dateFrom.isEmpty(), "From date should not be empty");
-            assertFalse(dateTo.isEmpty(), "To date should not be empty");
-
-            int salaryInt = Integer.parseInt(salaryEach);
-            int yearFromInt = Integer.parseInt(dateFrom.substring(0, 4));
-            int yearToInt = Integer.parseInt(dateTo.trim().substring(0, 4));
-
-            assertTrue(salaryInt > 100000, "Salary should be greater than 100 000");
-            assertTrue(yearFromInt <= yearToInt, "From date should not be greater than to date");
-            assertTrue(yearToInt > 1999, "To date should be greater than 1999");
+    public void testGetEmployeesWSalaryAbove100KAfter1999() throws SQLException{
+        List<Map<String, String>> employees = employeeDao.getEmployeesWSalaryAbove100KAfter99();
+        assertFalse(employees.isEmpty(), "employees list should not be empty");
+        for(Map<String, String> row: employees){
+            String employeeNum = row.get("emp_no");
+            String salary= row.get("salary");
+            String fromDate = row.get("from_date").substring(0,4);
+            String toDate = row.get("to_date").substring(0,4);
+            assertFalse(employeeNum.isEmpty(), "employee number should not be empty");
+            assertTrue(Integer.parseInt(salary) > 100000, "salary should be above 100000");
+            assertFalse(fromDate.isEmpty(), "from date should not be empty");
+            assertTrue(Integer.parseInt(fromDate) >= 1999, "from date should be greater or equals to 1999");
+            assertFalse(toDate.isEmpty(), "to date should not be empty");
         }
     }
-
     @Test
-    public void testGetMaleEmployeesWithFirstNameStartFromZ() throws SQLException {
-        List<Map<String, String>> employees = employeeDao.getMaleEmployeesWithFirstNameStartFromZ();
-        assertFalse(employees.isEmpty(), "The employee list should not be empty");
-
-        for (Map<String, String> employee : employees) {
+    public void testGetMaleEmployeesWithInitialsZ() throws SQLException{
+        List<Map<String, String>> employees = employeeDao.getMaleEmployeesWithInitialsZ();
+        assertFalse(employees.isEmpty(), "employees list should not be empty");
+        for(Map<String, String> employee: employees){
             String firstName = employee.get("first_name");
-            String gender = employee.get("gender");
-            String employeeNumber = employee.get("emp_no");
-            String birthDate = employee.get("birth_date");
             String lastName = employee.get("last_name");
+            String gender = employee.get("gender");
+            String employeeNum = employee.get("emp_no");
+            String birthDate = employee.get("birth_date");
             String hireDate = employee.get("hire_date");
-
-            assertFalse(firstName.isEmpty(), "First name should not be empty");
-            assertFalse(gender.isEmpty(), "Gender should not be empty");
-            assertFalse(employeeNumber.isEmpty(), "Employee number should not be empty");
-            assertFalse(birthDate.isEmpty(), "Birth date should not be empty");
-            assertFalse(lastName.isEmpty(), "Last name should not be empty");
-            assertFalse(hireDate.isEmpty(), "Hire date should not be empty");
-
-            assertEquals('z', firstName.toLowerCase().charAt(0), "First name should starts with letter 'z'");
-            assertEquals("M", gender.trim(), "Gender should be a male");
+            assertFalse(firstName.isEmpty(), "first name should not be empty");
+            assertTrue(String.valueOf(firstName).startsWith("Z"), "first name does not start with 'Z'");
+            assertFalse(lastName.isEmpty(), "last name should not be empty");
+            assertFalse(gender.isEmpty(), "gender should not be empty");
+            assertTrue(String.valueOf(gender).equals("M"), "gender is not equal to 'M'");
+            assertFalse(employeeNum.isEmpty(), "employee num should not be empty");
+            assertFalse(birthDate.isEmpty(), "birthdate should not be empty");
+            assertFalse(hireDate.isEmpty(), "hire date should not be empty");
         }
     }
+
 }
